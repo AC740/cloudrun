@@ -30,6 +30,13 @@
 name: 'Deploy to Cloud Run from Source'
 
 on:
+  workflow_dispatch:
+    # Optional: Define inputs if you want to provide parameters when triggering manually
+    inputs:
+      my_input:
+        description: 'A custom input'
+        required: false
+        default: 'default_value'
   push:
     branches:
       - '"main"'
