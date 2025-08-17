@@ -19,7 +19,8 @@ env:
   SERVICE_ACCOUNT: "github-sa@ac-2025-8-15.iam.gserviceaccount.com"
   GITHUB_REPO: "AC740/cloudrun"
   PROJECT_NUMBER: "196200699792"
-
+  REGION: "us-central1"    # <-- ADD THIS LINE
+  SERVICE: "my-service"      # <-- ADD THIS LINE
 
 jobs:
   deploy:
