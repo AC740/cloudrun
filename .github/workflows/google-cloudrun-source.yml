@@ -1,56 +1,50 @@
-name: 'Deploy to Cloud Run from Source'
+name: 'Build and Deploy to Cloud Run'
 
 on:
-  workflow_dispatch:
-    # Optional: Define inputs if you want to provide parameters when triggering manually
-    inputs:
-      my_input:
-        description: 'A custom input'
-        required: false
-        default: 'default_value'
   push:
     branches:
-      - '"main"'
-      
+      - 'main'
+
+permissions:
+  id-token: write
+  contents: read
+
 env:
   PROJECT_ID: "ac-2025-8-15"
-  POOL_ID: "github-pool"
-  PROVIDER_ID: "github-provider"
+  # Use the clean service account we created
   SERVICE_ACCOUNT: "github-deploy-sa@ac-2025-8-15.iam.gserviceaccount.com"
-  GITHUB_REPO: "AC740/cloudrun"
-  PROJECT_NUMBER: "196200699792"
-  REGION: "us-central1"    # <-- ADD THIS LINE
-  SERVICE: "my-service"      # <-- ADD THIS LINE
+  REGION: "us-central1"
+  SERVICE: "my-service"
+  # The Artifact Registry repo you just created
+  ARTIFACT_REPO: "cloudrun-repo"
 
 jobs:
   deploy:
-    runs-on: 'ubuntu-latest'
-
-    permissions:
-      contents: 'read'
-      id-token: 'write'
+    runs-on: ubuntu-latest
 
     steps:
       - name: 'Checkout'
-        uses: 'actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332' # actions/checkout@v4
+        uses: 'actions/checkout@v4'
 
-      - id: 'auth'
-        name: 'Google Cloud'
+      - name: 'Authenticate to Google Cloud'
         uses: 'google-github-actions/auth@v2'
         with:
-          workload_identity_provider: 'projects/${{ env.PROJECT_NUMBER}}/locations/global/workloadIdentityPools/${{ env.POOL_ID}}/providers/github-actions-provider-console'
-          service_account: '${{ env.SERVICE_ACCOUNT_EMAIL }}'
-          
-      - name: 'Deploy to Cloud Run'
-        uses: 'google-github-actions/deploy-cloudrun@33553064113a37d688aa6937bacbdc481580be17' # google-github-actions/deploy-cloudrun@v2
-        with:
-          service: '${{ env.SERVICE }}'
-          region: '${{ env.REGION }}'
-          project_id: '${{ env.PROJECT_ID }}' # <-- ADD THIS LINE
-          # NOTE: If using a different source folder, update the image name below:
-          source: './'
+          workload_identity_provider: 'projects/196200699792/locations/global/workloadIdentityPools/github-pool/providers/github-actions-provider-console'
+          service_account: '${{ env.SERVICE_ACCOUNT }}'
 
-      # If required, use the Cloud Run URL output in later steps
-      - name: 'Show output'
+      - name: 'Set up Cloud SDK'
+        uses: 'google-github-actions/setup-gcloud@v2'
+
+      - name: 'Build and Push Docker Image'
         run: |-
-          echo ${{ steps.deploy.outputs.url }}
+          # This builds your Dockerfile and pushes the container to Artifact Registry
+          gcloud builds submit --tag ${{ env.REGION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.ARTIFACT_REPO }}/${{ env.SERVICE }}
+
+      - name: 'Deploy to Cloud Run'
+        run: |-
+          # This deploys the specific image you just built
+          gcloud run deploy ${{ env.SERVICE }} \
+            --image ${{ env.REGION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.ARTIFACT_REPO }}/${{ env.SERVICE }} \
+            --region ${{ env.REGION }} \
+            --platform managed \
+            --allow-unauthenticated
