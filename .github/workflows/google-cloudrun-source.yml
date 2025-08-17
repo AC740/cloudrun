@@ -46,6 +46,7 @@ jobs:
         with:
           service: '${{ env.SERVICE }}'
           region: '${{ env.REGION }}'
+          project_id: '${{ env.PROJECT_ID }}' # <-- ADD THIS LINE
           # NOTE: If using a different source folder, update the image name below:
           source: './'
 
