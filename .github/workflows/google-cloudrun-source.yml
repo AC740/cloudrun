@@ -37,7 +37,7 @@ jobs:
         name: 'Google Cloud'
         uses: 'google-github-actions/auth@v2'
         with:
-          workload_identity_provider: 'projects/${{ env.PROJECT_NUMBER}}/locations/global/workloadIdentityPools/${{POOL_ID}}/providers/github-actions-provider-console'
+          workload_identity_provider: 'projects/${{ env.PROJECT_NUMBER}}/locations/global/workloadIdentityPools/${{ env.POOL_ID}}/providers/github-actions-provider-console'
           service_account: '${{ env.SERVICE_ACCOUNT_EMAIL }}'
           
       - name: 'Deploy to Cloud Run'
