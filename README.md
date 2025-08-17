@@ -1,9 +1,3 @@
-Of course. It's fantastic that it's working\! That was a challenging series of steps, and creating a definitive `README.md` is the perfect way to document the final, correct process.
-
-This file summarizes our entire journey into a clean, step-by-step guide. It includes all the necessary commands and the final, working YAML file.
-
------
-
 # Deploy a Python App to Google Cloud Run via GitHub Actions
 
 This repository contains a simple Python Flask application and a GitHub Actions workflow to automatically build a container and deploy it to Google Cloud Run on every push to the `main` branch.
