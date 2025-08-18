@@ -31,7 +31,7 @@ Run these in your Cloud Shell or local terminal to make the next steps easier.
 # --- UPDATE THESE VALUES ---
 export PROJECT_ID="[your project id]"
 export REGION="us-central1"
-export GITHUB_REPO="AC740/cloudrun" # Your GitHub Org/User and Repo name
+export GITHUB_REPO="AC740/quest-gcloud" # Your GitHub Org/User and Repo name
 export SERVICE_ACCOUNT_NAME="github-deploy-sa" # A name for your new service account
 export ARTIFACT_REPO="cloudrun-repo" # A name for your new Artifact Registry repo
 
