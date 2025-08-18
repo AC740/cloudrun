@@ -11,7 +11,7 @@ Your repository should contain the following files at the root:
 ```
 .
 ├── .github/workflows/
-│   └── cloud-run-deploy.yml
+│   └── google-cloudrun-source.yml
 ├── Dockerfile
 ├── main.py
 └── requirements.txt
@@ -29,7 +29,7 @@ Run these in your Cloud Shell or local terminal to make the next steps easier.
 
 ```bash
 # --- UPDATE THESE VALUES ---
-export PROJECT_ID="ac-2025-8-15"
+export PROJECT_ID="[your project id]"
 export REGION="us-central1"
 export GITHUB_REPO="AC740/cloudrun" # Your GitHub Org/User and Repo name
 export SERVICE_ACCOUNT_NAME="github-deploy-sa" # A name for your new service account
@@ -166,10 +166,10 @@ permissions:
   contents: read
 
 env:
-  PROJECT_ID: "ac-2025-8-15"
+  PROJECT_ID: "[your project id]"
   # IMPORTANT: Find your Project Number in the GCP Console or with 'gcloud projects describe'
   PROJECT_NUMBER: "196200699792"
-  SERVICE_ACCOUNT: "github-deploy-sa@ac-2025-8-15.iam.gserviceaccount.com"
+  SERVICE_ACCOUNT: "github-deploy-sa@[your project id].iam.gserviceaccount.com"
   REGION: "us-central1"
   SERVICE: "my-service"
   ARTIFACT_REPO: "cloudrun-repo"
